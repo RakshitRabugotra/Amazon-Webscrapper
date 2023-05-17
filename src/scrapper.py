@@ -1,16 +1,17 @@
 """
 File to scrap the websites
 """
+import os
+import requests
 from typing import Any
 from bs4 import BeautifulSoup
-import requests
 import src.util as util
 
 # Load the settings from the util file
 settings = util.load_json_configuration()
 
 # To interpret the fields given in settings.json
-def interpret_fields(setting_fields:dict[str, str]=settings['fields']):
+def interpret_fields(setting_fields:dict[str, str]=settings['fields']) -> dict[str, str]:
     """
         This function will interpret the string to give a nested dictionary
         with keys as 'parent tags',
@@ -52,6 +53,20 @@ def scrap_information(url: str) -> dict[str, Any]:
     product = {}
 
     for field_name, (parent_tag, attrs) in fields.items():
+        # If the field name is image, then check and download the image
+        if field_name.endswith("image"):
+            # Fetch the url for the image
+            image_url = soup.find(parent_tag, attrs=attrs).img['src']
+            # Get the image name
+            image_name = os.path.split(image_url)[1]
+            # Check if the image is already downloaded
+            if os.path.isfile(image_name):
+                continue
+            # Else download the image
+            util.download_image(image_url, destination="./cache")
+        # end-if
+        
+        # Else fetch the text details
         product[field_name] = soup.find(parent_tag, attrs=attrs).text.strip()
 
     # Return the product
