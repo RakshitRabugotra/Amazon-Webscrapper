@@ -44,7 +44,7 @@ def write_json_configuration(dict_object, json_file_pointer) -> int:
     return -1
 
 
-def download_image(image_url: str):
+def download_image(image_url: str, destination: str):
     """
     Downloads an image from the given image url, (if found)
     """
@@ -57,7 +57,7 @@ def download_image(image_url: str):
     # Else fetch the image name and download
     filename = os.path.split(image_url)[1]
 
-    with open(filename, 'wb') as imageFile:
+    with open(os.path.join(destination, filename), 'wb') as imageFile:
         imageFile.write(response.content)
     # end-with
 
