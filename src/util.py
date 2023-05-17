@@ -1,7 +1,9 @@
 """
 The utilities file for the project
 """
+import os
 import json
+import requests
 
 def load_json_configuration(json_file_pointer="./settings.json"):
     """
@@ -40,6 +42,24 @@ def write_json_configuration(dict_object, json_file_pointer) -> int:
     
     # Unsuccessful execution
     return -1
+
+
+def download_image(image_url: str):
+    """
+    Downloads an image from the given image url, (if found)
+    """
+    response = requests.get(image_url)
+    if not response.status_code:
+        # If we don't get an expected response,
+        # then exit early
+        return
+    
+    # Else fetch the image name and download
+    filename = os.path.split(image_url)[1]
+
+    with open(filename, 'wb') as imageFile:
+        imageFile.write(response.content)
+    # end-with
 
 """
 Load configuration form the settings
