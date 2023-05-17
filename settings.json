@@ -6,7 +6,8 @@
         "name": "span~id:productTitle",
         "price-symbol": "span~class:a-price-symbol",
         "price-whole": "span~class:a-price-whole",
-        "availability": "div~id:availability"
+        "availability": "div~id:availability",
+        "product-image": "div~id:imgTagWrapperId"
     },
     "wishlist-txt": "./wishlist.txt"
 }
